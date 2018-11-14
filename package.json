@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-sketch": "canvas-sketch sketch.js --output=exports/",
-    "start-animation" : "canvas-sketch animation.js --output=exports/"
+    "start-animation": "canvas-sketch animation.js --output=exports/"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,8 @@
   "dependencies": {
     "canvas-sketch": "0.0.27",
     "canvas-sketch-util": "^1.5.0",
+    "eases": "^1.0.8",
+    "gl-matrix": "^2.8.1",
     "nice-color-palettes": "^2.0.0"
   }
 }

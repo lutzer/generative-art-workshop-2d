@@ -1,15 +1,19 @@
 const canvasSketch = require('canvas-sketch');
 const  { mapRange } = require('canvas-sketch-util/math');
 const random = require('canvas-sketch-util/random');
+const { vec2 } = require('gl-matrix');
+const  { lerp } = require('canvas-sketch-util/math');
 
 const settings = {
   animate: true,
-  dimensions: [ 2048, 2048 ]
+  dimensions: [ 512, 512 ],
+  duration: 10,
+  fps: 24
 };
 
 const sketch = () => {
 
-  const createGrid = (count = 20) => {
+  const createGrid = (count = 15) => {
     const points = [];
     for (let x = 0; x < count; x++) {
       for (let y = 0; y < count; y++) {
@@ -23,25 +27,47 @@ const sketch = () => {
 
   const grid = createGrid();
 
-  return ({ context, width, height, time }) => {
+  return ({ context, width, height, time, playhead }) => {
     // const v = mapRange(Math.sin(time), -1, 1, 0, 1);
+    context.globalAlpha = 1;
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
 
+    const margin = 0.1 * width;
     grid.forEach( (point) => {
       [u, v] = point;
-      [x, y] = [u * width, v * height];
+      
+      const x = lerp(margin, width - margin, u);
+      const y = lerp(margin, height - margin, v);
 
-      const radius = Math.max(0, random.noise3D(u, v, time)) * 50;
+      // const radius = Math.max(0, random.noise3D(u, v, time)) * 50;
+      const frequency = 0.5;
+      const noise = loopNoise(u * frequency, v * frequency, playhead, 2)
+      const angle = noise * Math.PI * 2
+      const normal = [ Math.cos(angle), Math.sin(angle) ];
+      const radius = noise * 20;
+
+      const a = vec2.scaleAndAdd([],[x, y], normal, radius);
+      const b = vec2.scaleAndAdd([],[x, y], normal, -radius);
 
       context.beginPath();
-      context.arc(x, y, radius, 0, Math.PI * 2);
-      context.fillStyle = "black";
-      context.fill();
+      [a, b].forEach( (p) => {
+        context.lineTo(p[0],p[1]);
+      });
+      context.strokeStyle = 'black'
+      context.lineWidth = 2;
+      // context.globalAlpha = Math.abs(noise) * 0.9 + 0.1;
+      context.stroke();
 
 
     });
   };
 };
+
+function loopNoise (x, y, t, scale = 1) {
+  const duration = scale;
+  const current = t * scale;
+  return ((duration - current) * random.noise3D(x, y, current) + current * random.noise3D(x, y, current - duration)) / duration;
+}
 
 canvasSketch(sketch, settings);
