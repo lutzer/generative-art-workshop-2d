@@ -4,7 +4,9 @@
   "description": "",
   "main": "sketch.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-sketch": "canvas-sketch sketch.js --output=exports/",
+    "start-animation" : "canvas-sketch animation.js --output=exports/"
   },
   "keywords": [],
   "author": "",
