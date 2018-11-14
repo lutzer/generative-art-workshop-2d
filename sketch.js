@@ -19,7 +19,7 @@ const sketch = ({ width, height }) => {
   const background = palette.shift();
   const aspectRatio = width / height;
 
-  const createGrid = (count = 60) => {
+  const createGrid = (count = 300) => {
     const points = [];
     const frequency = random.range(0.1,3);
     for (let x = 0; x < count; x++) {
@@ -45,6 +45,9 @@ const sketch = ({ width, height }) => {
 
   return ({ context, width, height }) => {
     const minDim = Math.min(width,height);
+
+    context.globalAlpha = 1;
+    context.globalCompositeOperation = 'source-over';
     context.fillStyle = "hsl(0,0%,95%)";
     context.fillRect(0, 0, width, height);
 
@@ -61,7 +64,8 @@ const sketch = ({ width, height }) => {
       context.font= `${radius}px "Arial"`;
       context.translate(x, y);
       context.rotate(rotation);
-      context.globalAlpha = alpha;
+      context.globalCompositeOperation = 'multiply';
+      context.globalAlpha = 0.05;
       context.fillText('\u00A6', 0, 0);
       context.restore();
     });
