@@ -45,11 +45,12 @@ const sketch = () => {
 
       // const radius = Math.max(0, random.noise3D(u, v, time)) * 50;
       const frequency = 0.5;
-      const noise = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 0)
-      const noise2 = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 1000)
-      const angle = noise * Math.PI * 2
+      const noise1 = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 0)
+      const noise2 = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 100)
+
+      const angle = noise1 * Math.PI * 2
       const normal = [ Math.cos(angle), Math.sin(angle) ];
-      const radius = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 1000) * 20;
+      const radius = noise2 * 20;
 
       // console.log([noise, noise2]);
 
