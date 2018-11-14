@@ -38,9 +38,10 @@ const sketch = () => {
 
     context.beginPath();
     circle.forEach((point,i) => {
-      const noise = random.noise2D(i, time);
+      const frequency = 1;
+      const noise = random.noise3D(point[0] * frequency, point[1] * frequency, time);
 
-      const randomRadius = noise * 10 + radius;
+      const randomRadius = noise * 20 + radius;
       const p = vec2.scaleAndAdd([], middlepoint, point, randomRadius);
       context.lineTo(p[0],p[1]);
     })
