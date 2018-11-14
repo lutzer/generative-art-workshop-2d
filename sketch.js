@@ -7,29 +7,33 @@ random.setSeed(random.getRandomSeed());
 
 const settings = {
   suffix: random.getSeed(),
-  dimensions: [ 512, 512 ]
+  // dimensions: [ 512, 512 ]
+  dimensions: "A4",
+  orientation: 'portrait',
+  pixelsPerInch: 300,
+  units: 'cm'
 };
 
-const sketch = () => {
+const sketch = ({ width, height }) => {
   const palette = random.pick(palettes);
   const background = palette.shift();
+  const aspectRatio = width / height;
 
-  console.log(palette);
-
-  const createGrid = (count = 50) => {
+  const createGrid = (count = 60) => {
     const points = [];
+    const frequency = random.range(0.1,3);
     for (let x = 0; x < count; x++) {
       for (let y = 0; y < count; y++) {
         const u = count <= 1 ? 0.5 : x / (count - 1);
         const v = count <= 1 ? 0.5 : y / (count -1);
 
-        const frequency = 1.2
-        const noise = random.noise2D(u * frequency, v * frequency);
+        const noise = random.noise2D(u * aspectRatio * frequency, v * frequency);
 
         points.push({
           color: random.pick(palette),
-          radius: Math.abs(30 + noise * 100),
-          rotation: noise * Math.PI * .3,
+          radius: Math.abs(2 + noise * 5),
+          rotation: noise * Math.PI * .2,
+          alpha: noise + 1 * 0.5,
           position: [u, v]
         });
       }
@@ -41,11 +45,11 @@ const sketch = () => {
 
   return ({ context, width, height }) => {
     const minDim = Math.min(width,height);
-    context.fillStyle = background;
+    context.fillStyle = "hsl(0,0%,95%)";
     context.fillRect(0, 0, width, height);
 
     const margin = 0.2 * width;
-    grid.forEach( ({ position, color, radius, rotation }) => {
+    grid.forEach( ({ position, color, radius, rotation, alpha }) => {
       [u, v] = position;
       const x = lerp(margin, width - margin, u);
       const y = lerp(margin, height - margin, v);
@@ -57,7 +61,8 @@ const sketch = () => {
       context.font= `${radius}px "Arial"`;
       context.translate(x, y);
       context.rotate(rotation);
-      context.fillText('.', 0, 0);
+      context.globalAlpha = alpha;
+      context.fillText('\u00A6', 0, 0);
       context.restore();
     });
   };
