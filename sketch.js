@@ -19,20 +19,24 @@ const sketch = ({ width, height }) => {
   const background = palette.shift();
   const aspectRatio = width / height;
 
-  const createGrid = (count = 300) => {
+  const createGrid = (count = 100) => {
     const points = [];
-    const frequency = random.range(0.1,3);
+    const frequency = random.range(0.1,2);
     for (let x = 0; x < count; x++) {
       for (let y = 0; y < count; y++) {
-        const u = count <= 1 ? 0.5 : x / (count - 1);
-        const v = count <= 1 ? 0.5 : y / (count -1);
+        let u = count <= 1 ? 0.5 : x / (count - 1);
+        let v = count <= 1 ? 0.5 : y / (count -1);
+
+        const offset = random.insideCircle(0.1);
+        u += offset[0];
+        v += offset[1];
 
         const noise = random.noise2D(u * aspectRatio * frequency, v * frequency);
 
         points.push({
           color: random.pick(palette),
           radius: Math.abs(2 + noise * 5),
-          rotation: noise * Math.PI * .2,
+          rotation: noise * Math.PI * .5,
           alpha: noise + 1 * 0.5,
           position: [u, v]
         });
@@ -58,15 +62,15 @@ const sketch = ({ width, height }) => {
       const y = lerp(margin, height - margin, v);
 
       context.save();
-      context.fillStyle = color
+      context.fillStyle = 'black'
       context.textAlign = 'center';
       context.textBaseline = 'middle';
       context.font= `${radius}px "Arial"`;
       context.translate(x, y);
       context.rotate(rotation);
       context.globalCompositeOperation = 'multiply';
-      context.globalAlpha = 0.05;
-      context.fillText('\u00A6', 0, 0);
+      context.globalAlpha = 0.1;
+      context.fillText('\u2396', 0, 0);
       context.restore();
     });
   };
