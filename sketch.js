@@ -15,7 +15,7 @@ const settings = {
 };
 
 const sketch = ({ width, height }) => {
-  const palette = random.pick(palettes);
+  const palette = random.shuffle(random.pick(palettes));
   const background = palette.shift();
   const aspectRatio = width / height;
 
