@@ -1,6 +1,7 @@
 const canvasSketch = require('canvas-sketch');
 const { vec2 } = require('gl-matrix');
 const random = require('canvas-sketch-util/random');
+const  { lerp } = require('canvas-sketch-util/math');
 
 random.setSeed(random.getRandomSeed());
 
@@ -9,6 +10,8 @@ const settings = {
   animate: true,
   scaleToView: true
 };
+
+const frequency = random.range(0.5,1.5);
 
 const sketch = () => {
 
@@ -33,19 +36,21 @@ const sketch = () => {
 
     const middlepoint = [ width/2, height/2 ];
 
-    const radius = 400;
-    const numberOfCircles = 5;
+    const smallRadius = 300;
+    const bigRadius = 800;
+    const numberOfCircles = 20;
     const circle = createCircle();
 
     
-    for (let n=0; n<numberOfCircles; n++) {
+    for (let n=0; n<numberOfCircles; n++) { 
+      const offset = [random.noise3D(0,n,time), random.noise3D(1,n,time)];
       context.beginPath();
       circle.forEach((point,i) => {
-        const frequency = 1;
-        const noise = random.noise4D(point[0] * frequency, point[1] * frequency, n, time);
-  
-        const randomRadius = noise * 20 + radius;
-        const p = vec2.scaleAndAdd([], middlepoint, point, randomRadius);
+        const noise = random.noise4D(point[0] * frequency, point[1] * frequency, n * frequency, time);
+        
+        const mp = vec2.scaleAndAdd([], middlepoint, offset, 30);
+        const randomRadius = noise * 20 + lerp(smallRadius, bigRadius, n/numberOfCircles);
+        const p = vec2.scaleAndAdd([], mp, point, randomRadius);
         context.lineTo(p[0],p[1]);
       })
       context.strokeStyle = 'black';
