@@ -28,7 +28,7 @@ const sketch = () => {
   }
 
   const grid = createGrid();
-  const ease = bezierEasing(.16,1.48,1,-1.1);
+  const ease = bezierEasing(1,.36,.27,.92);
 
   return ({ context, width, height, time, playhead }) => {
     // const v = mapRange(Math.sin(time), -1, 1, 0, 1);
@@ -45,10 +45,13 @@ const sketch = () => {
 
       // const radius = Math.max(0, random.noise3D(u, v, time)) * 50;
       const frequency = 0.5;
-      const noise = loopNoise(u * frequency, v * frequency, ease(playhead), 2)
+      const noise = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 0)
+      const noise2 = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 1000)
       const angle = noise * Math.PI * 2
       const normal = [ Math.cos(angle), Math.sin(angle) ];
-      const radius = noise * 20;
+      const radius = loopNoise(u * frequency, v * frequency, ease(playhead), 2, 1000) * 20;
+
+      // console.log([noise, noise2]);
 
       const a = vec2.scaleAndAdd([],[x, y], normal, radius);
       const b = vec2.scaleAndAdd([],[x, y], normal, -radius);
@@ -67,10 +70,10 @@ const sketch = () => {
   };
 };
 
-function loopNoise (x, y, t, scale = 1) {
+function loopNoise (x, y, t, scale = 1, w) {
   const duration = scale;
   const current = t * scale;
-  return ((duration - current) * random.noise3D(x, y, current) + current * random.noise3D(x, y, current - duration)) / duration;
+  return ((duration - current) * random.noise4D(x, y, current,w) + current * random.noise4D(x, y, current - duration, w)) / duration;
 }
 
 canvasSketch(sketch, settings);
