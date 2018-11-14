@@ -54,8 +54,9 @@ const sketch = () => {
         context.lineTo(p[0],p[1]);
       })
       context.strokeStyle = 'black';
-      context.lineWidth = 4;
-      // context.globalAlpha = Math.abs(noise) * 0.9 + 0.1;
+      context.lineWidth = 100;
+      context.globalAlpha = 0.1;
+      context.closePath();
       context.stroke();
     } 
     
