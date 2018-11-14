@@ -33,22 +33,27 @@ const sketch = () => {
 
     const middlepoint = [ width/2, height/2 ];
 
-    const radius = 400
+    const radius = 400;
+    const numberOfCircles = 5;
     const circle = createCircle();
 
-    context.beginPath();
-    circle.forEach((point,i) => {
-      const frequency = 1;
-      const noise = random.noise3D(point[0] * frequency, point[1] * frequency, time);
-
-      const randomRadius = noise * 20 + radius;
-      const p = vec2.scaleAndAdd([], middlepoint, point, randomRadius);
-      context.lineTo(p[0],p[1]);
-    })
-    context.strokeStyle = 'black';
-    context.lineWidth = 4;
-    // context.globalAlpha = Math.abs(noise) * 0.9 + 0.1;
-    context.stroke();
+    
+    for (let n=0; n<numberOfCircles; n++) {
+      context.beginPath();
+      circle.forEach((point,i) => {
+        const frequency = 1;
+        const noise = random.noise4D(point[0] * frequency, point[1] * frequency, n, time);
+  
+        const randomRadius = noise * 20 + radius;
+        const p = vec2.scaleAndAdd([], middlepoint, point, randomRadius);
+        context.lineTo(p[0],p[1]);
+      })
+      context.strokeStyle = 'black';
+      context.lineWidth = 4;
+      // context.globalAlpha = Math.abs(noise) * 0.9 + 0.1;
+      context.stroke();
+    } 
+    
   };
 };
 
