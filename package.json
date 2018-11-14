@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bezier-easing": "^2.1.0",
     "canvas-sketch": "0.0.27",
     "canvas-sketch-util": "^1.5.0",
     "eases": "^1.0.8",
