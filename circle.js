@@ -6,7 +6,7 @@ const  { lerp, mapRange } = require('canvas-sketch-util/math');
 random.setSeed(random.getRandomSeed());
 
 const settings = {
-  dimensions: [ 2048, 2048 ],
+  dimensions: [ 512, 512 ],
   animate: true,
   scaleToView: true
 };
@@ -36,9 +36,9 @@ const sketch = () => {
 
     const middlepoint = [ width/2, height/2 ];
 
-    const smallRadius = 300;
-    const bigRadius = 800;
-    const numberOfCircles = 40;
+    const smallRadius = 80;
+    const bigRadius = 180;
+    const numberOfCircles = 12;
 
     
     for (let n=0; n<numberOfCircles; n++) { 
@@ -49,14 +49,14 @@ const sketch = () => {
       circle.forEach((point,i) => {
         const noise = random.noise4D(point[0] * frequency, point[1] * frequency, n * frequency, time);
         
-        const mp = vec2.scaleAndAdd([], middlepoint, offset, 40);
-        const randomRadius = noise * 20 + lerp(smallRadius, bigRadius, n/numberOfCircles);
+        const mp = vec2.scaleAndAdd([], middlepoint, offset, 10);
+        const randomRadius = noise * 7 + lerp(smallRadius, bigRadius, n/numberOfCircles);
         const p = vec2.scaleAndAdd([], mp, point, randomRadius);
         context.lineTo(p[0],p[1]);
       })
       context.strokeStyle = 'black';
-      context.lineWidth = 100;
-      context.globalAlpha = 0.1;
+      context.lineWidth = 40;
+      context.globalAlpha = 0.15;
       context.closePath();
       context.stroke();
     } 

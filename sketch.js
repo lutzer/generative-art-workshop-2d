@@ -1,3 +1,12 @@
+/**
+ * @Author: Lutz Reiter [http://www.lu-re.de] <lutz>
+ * @Date:   2018-11-17T17:03:37+01:00
+ * @Last modified by:   lutz
+ * @Last modified time: 2018-11-20T20:32:26+01:00
+ */
+
+
+
 const canvasSketch = require('canvas-sketch');
 const  { lerp } = require('canvas-sketch-util/math');
 const random = require('canvas-sketch-util/random');
@@ -19,7 +28,7 @@ const sketch = ({ width, height }) => {
   const background = palette.shift();
   const aspectRatio = width / height;
 
-  const createGrid = (count = 100) => {
+  const createGrid = (count = 30) => {
     const points = [];
     const frequency = random.range(0.1,2);
     for (let x = 0; x < count; x++) {
@@ -62,14 +71,14 @@ const sketch = ({ width, height }) => {
       const y = lerp(margin, height - margin, v);
 
       context.save();
-      context.fillStyle = 'black'
+      context.fillStyle = color;
       context.textAlign = 'center';
       context.textBaseline = 'middle';
       context.font= `${radius}px "Arial"`;
       context.translate(x, y);
       context.rotate(rotation);
       context.globalCompositeOperation = 'multiply';
-      context.globalAlpha = 0.1;
+      context.globalAlpha = 0.7;
       context.fillText('\u2396', 0, 0);
       context.restore();
     });
